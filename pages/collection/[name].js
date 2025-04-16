@@ -15,6 +15,7 @@ export default function CollectionView() {
             try {
                 const res = await fetch(`/api/${name}`);
                 const data = await res.json();
+                console.log(data);
                 setDocs(data.data);
                 setLoading(false);
             } catch (err) {
@@ -35,38 +36,66 @@ export default function CollectionView() {
             ) : (
                 <div
                     style={{
+                        maxHeight: '80vh',
+                        overflowY: 'auto',
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(6, 1fr)',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: '20px',
-                        marginTop: '30px'
+                        marginTop: '30px',
+                        paddingRight: '10px'
                     }}
                 >
                     {docs.map((doc) => (
-                        <div key={doc._id} style={{ border: '1px solid #ccc', padding: '10px' }}>
-                            {/* Show image if field exists */}
-                            {doc.image_path && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                    src={doc.image_path}
-                                    alt="doc image"
-                                    style={{ width: '400px', height: '400px', objectFit: 'cover' }}
-                                />
-                            )}
-
-                            {/* Show fallback if image field not found */}
-                            {!doc.image_path && (
-                                <div style={{ height: '150px', backgroundColor: '#eee' }}>
-                                    <p>No Image</p>
+                        <div key={doc._id} style={{ border: '1px solid #ccc', padding: '10px', background: '#fff' }}>
+                            {doc.image_path ? (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '15px'
+                                    }}
+                                >
+                                    <img
+                                        src={doc.image_path}
+                                        alt="doc"
+                                        style={{
+                                            width: '120px',
+                                            height: '120px',
+                                            objectFit: 'cover',
+                                            borderRadius: '8px',
+                                            flexShrink: 0
+                                        }}
+                                    />
+                                    <div>
+                                        <h4 style={{ margin: '0 0 6px 0', fontSize: '14px' }}>
+                                            <strong>Unique Id:</strong> {doc.unique_id || 'N/A'}
+                                        </h4>
+                                        <h4 style={{ margin: 0, fontSize: '14px' }}>
+                                            <strong>Source:</strong> {doc.source || 'Unknown'}
+                                        </h4>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div style={{ height: '150px', backgroundColor: '#eee', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <p style={{ fontSize: '12px' }}>No Image</p>
                                 </div>
                             )}
 
-                            <pre style={{ fontSize: '10px', marginTop: '10px', overflowX: 'auto' }}>
-                                {JSON.stringify(doc, null, 2)}
-                            </pre>
+                            {doc.image_path && (
+                                <a
+                                    href={doc.image_path}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ fontSize: '12px', display: 'inline-block', marginTop: '8px', color: '#0070f3' }}
+                                >
+                                    🔍 View Full
+                                </a>
+                            )}
                         </div>
-                    ))}s
+                    ))}
                 </div>
             )}
         </div>
+
     );
 }

@@ -62,7 +62,7 @@ export default function Dashboard() {
                   href={`/collection/${col.name.replaceAll(" ", "-")}`}
                   style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
                 >
-                  {col.name}
+                  <span>{col.name} ({col.count})</span>
                 </a>
               </li>
             ))}
