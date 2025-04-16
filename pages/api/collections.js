@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         const collections = await db.listCollections().toArray();
 
         const paginated = collections.slice(offset, +offset + +limit);
-        const data = paginated.map(c => ({ name: c.name }));
+        const data = await Promise.all(paginated.map(async c => ({ name: c.name, count: await db.collection(c.name).countDocuments() })));
 
         return res.status(200).json({ data: data });
     } catch (error) {
